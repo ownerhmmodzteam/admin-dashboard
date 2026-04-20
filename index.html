@@ -33,53 +33,38 @@
             border-radius: 28px;
         }
         .stat-icon {
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 18px;
-            background: rgba(0, 122, 255, 0.1);
-            color: var(--accent);
-            font-size: 1.2rem;
+            width: 50px; height: 50px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 18px; background: rgba(0, 122, 255, 0.1);
+            color: var(--accent); font-size: 1.2rem;
         }
         .pulse-live {
-            width: 10px;
-            height: 10px;
-            background: #10b981;
-            border-radius: 50%;
-            position: relative;
+            width: 10px; height: 10px; background: #10b981; border-radius: 50%; position: relative;
         }
         .pulse-live::after {
-            content: '';
-            position: absolute;
-            inset: -4px;
-            border: 2px solid #10b981;
-            border-radius: 50%;
+            content: ''; position: absolute; inset: -4px;
+            border: 2px solid #10b981; border-radius: 50%;
             animation: pulse-ring 1.5s infinite;
         }
         @keyframes pulse-ring { 0% { transform: scale(0.5); opacity: 1; } 100% { transform: scale(2); opacity: 0; } }
         #auth-screen {
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
-            background: #000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+            position: fixed; inset: 0; z-index: 9999;
+            background: #000; display: flex; align-items: center; justify-content: center; padding: 20px;
         }
         .ios-input {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 16px;
-            color: white;
-            padding: 16px;
-            width: 100%;
-            outline: none;
-            transition: 0.3s;
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px; color: white; padding: 16px; width: 100%; outline: none; transition: 0.3s;
         }
         .ios-input:focus { border-color: var(--accent); background: rgba(255,255,255,0.08); }
+        .toggle-btn {
+            width: 50px; height: 26px; background: #333; border-radius: 20px; position: relative; transition: 0.3s;
+        }
+        .toggle-btn.active { background: #34c759; }
+        .toggle-circle {
+            width: 22px; height: 22px; background: white; border-radius: 50%;
+            position: absolute; top: 2px; left: 2px; transition: 0.3s;
+        }
+        .toggle-btn.active .toggle-circle { left: 26px; }
         ::-webkit-scrollbar { display: none; }
     </style>
 </head>
@@ -92,7 +77,7 @@
             <p class="text-white/40 text-[10px] font-bold uppercase tracking-[3px] mb-8">Secure Authentication</p>
             <div class="space-y-4">
                 <input type="password" id="admin-pass" class="ios-input text-center" placeholder="Admin Password">
-                <button onclick="checkAuth()" class="w-full h-14 bg-blue-500 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-blue-500/20 active:scale-95 transition-all">Sign In</button>
+                <button onclick="checkAuth()" class="w-full h-14 bg-blue-500 rounded-2xl font-black text-xs uppercase tracking-widest active:scale-95 transition-all">Sign In</button>
             </div>
         </div>
     </div>
@@ -123,7 +108,7 @@
             <div class="glass-card p-6">
                 <div class="stat-icon mb-4" style="color: #f59e0b; background: rgba(245, 158, 11, 0.1);"><i class="fa-solid fa-server"></i></div>
                 <p class="text-white/40 text-[9px] font-bold uppercase tracking-widest">Total Req</p>
-                <h2 class="text-4xl font-black mt-1" id="total-req">3,8k</h2>
+                <h2 class="text-4xl font-black mt-1" id="total-req">3.8k</h2>
             </div>
             <div class="glass-card p-6">
                 <div class="stat-icon mb-4" style="color: #ec4899; background: rgba(236, 72, 153, 0.1);"><i class="fa-solid fa-shield-halved"></i></div>
@@ -133,58 +118,63 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="lg:col-span-2 glass-card p-8">
-                <div class="flex justify-between items-center mb-10">
-                    <div>
-                        <h3 class="text-lg font-bold tracking-tight">Live Activity</h3>
-                        <p class="text-white/20 text-[10px] uppercase font-bold tracking-widest mt-1">User Traffic</p>
+            <div class="lg:col-span-2 space-y-6">
+                <div class="glass-card p-8">
+                    <div class="flex justify-between items-center mb-10">
+                        <div>
+                            <h3 class="text-lg font-bold tracking-tight">Announcement Control</h3>
+                            <p class="text-white/20 text-[10px] uppercase font-bold tracking-widest mt-1">Remote Alert System</p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-[10px] font-bold text-white/40 uppercase">Show Alert</span>
+                            <div id="alert-toggle" onclick="toggleAlert()" class="toggle-btn cursor-pointer">
+                                <div class="toggle-circle"></div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="text-[9px] font-bold text-blue-500 bg-blue-500/10 px-4 py-1.5 rounded-full uppercase tracking-widest">Real-time Feed</div>
-                </div>
-                <div class="h-[300px] w-full">
-                    <canvas id="liveChart"></canvas>
-                </div>
-            </div>
-            
-            <div class="glass-card p-8 flex flex-col justify-between">
-                <div>
-                    <h3 class="text-lg font-bold tracking-tight mb-2">Service Traffic</h3>
-                    <p class="text-white/20 text-[10px] uppercase font-bold tracking-widest mb-10">Top Performing Services</p>
                     
-                    <div class="space-y-6">
-                        <div class="space-y-2">
-                            <div class="flex justify-between text-[10px] font-bold uppercase tracking-widest">
-                                <span class="text-white/40">Anime Stream</span>
-                                <span class="text-blue-500">82%</span>
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-bold text-blue-500 uppercase px-2">Title</label>
+                                <input type="text" id="announce-title" class="ios-input" placeholder="Hallo Pengguna hmmodz">
                             </div>
-                            <div class="w-full bg-white/5 h-2 rounded-full overflow-hidden">
-                                <div class="bg-blue-500 h-full w-[82%] rounded-full shadow-[0_0_15px_rgba(0,122,255,0.4)]"></div>
-                            </div>
-                        </div>
-                        <div class="space-y-2">
-                            <div class="flex justify-between text-[10px] font-bold uppercase tracking-widest">
-                                <span class="text-white/40">Community Chat</span>
-                                <span class="text-green-500">45%</span>
-                            </div>
-                            <div class="w-full bg-white/5 h-2 rounded-full overflow-hidden">
-                                <div class="bg-green-500 h-full w-[45%] rounded-full"></div>
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-bold text-blue-500 uppercase px-2">Image URL (PNG)</label>
+                                <input type="text" id="announce-image" class="ios-input" placeholder="https://example.com/image.png">
                             </div>
                         </div>
                         <div class="space-y-2">
-                            <div class="flex justify-between text-[10px] font-bold uppercase tracking-widest">
-                                <span class="text-white/40">Donghua Stream</span>
-                                <span class="text-purple-500">28%</span>
-                            </div>
-                            <div class="w-full bg-white/5 h-2 rounded-full overflow-hidden">
-                                <div class="bg-purple-500 h-full w-[28%] rounded-full"></div>
-                            </div>
+                            <label class="text-[10px] font-bold text-blue-500 uppercase px-2">Description</label>
+                            <textarea id="announce-desc" class="ios-input h-32 resize-none" placeholder="Masukkan deskripsi pembaruan aplikasi..."></textarea>
                         </div>
+                        <button onclick="updateAnnouncement()" class="w-full h-14 bg-blue-500 rounded-2xl font-black text-xs uppercase tracking-widest active:scale-95 transition-all mt-4">Broadcast Update</button>
                     </div>
                 </div>
 
-                <div class="bg-blue-500/10 border border-blue-500/20 rounded-2xl p-4 mt-10">
-                    <p class="text-[10px] text-blue-400 font-bold uppercase tracking-widest">System Tip</p>
-                    <p class="text-xs text-white/60 mt-2 leading-relaxed">Server beban rendah, performa stabil untuk 10k+ concurrent users.</p>
+                <div class="glass-card p-8">
+                    <div class="h-[250px] w-full">
+                        <canvas id="liveChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="space-y-6">
+                <div class="glass-card p-8">
+                    <h3 class="text-lg font-bold tracking-tight mb-2">Service Traffic</h3>
+                    <p class="text-white/20 text-[10px] uppercase font-bold tracking-widest mb-10">Top Performing</p>
+                    <div class="space-y-6" id="traffic-stats"></div>
+                </div>
+
+                <div class="glass-card p-6 bg-blue-500/5 border-blue-500/20">
+                    <h3 class="text-sm font-bold mb-4">Preview Alert</h3>
+                    <div class="bg-[#1c1c1e] rounded-2xl overflow-hidden border border-white/10">
+                        <img id="prev-img" src="https://via.placeholder.com/400x200" class="w-full h-24 object-cover opacity-50">
+                        <div class="p-4">
+                            <h4 id="prev-title" class="text-xs font-bold">Hallo Pengguna hmmodz</h4>
+                            <p id="prev-desc" class="text-[10px] text-white/40 mt-1 line-clamp-2">Deskripsi akan muncul di sini sesuai input...</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -206,6 +196,7 @@
 
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
+        let isAlertActive = false;
 
         function checkAuth() {
             const pass = document.getElementById('admin-pass').value;
@@ -213,15 +204,57 @@
                 document.getElementById('auth-screen').style.display = 'none';
                 document.getElementById('dashboard-content').classList.remove('hidden');
                 initDashboard();
+                syncAnnouncement();
             } else {
                 alert("Password Salah!");
             }
         }
 
+        function syncAnnouncement() {
+            db.ref('app_announcement').on('value', snapshot => {
+                const data = snapshot.val();
+                if(data) {
+                    document.getElementById('announce-title').value = data.title || "";
+                    document.getElementById('announce-image').value = data.image_url || "";
+                    document.getElementById('announce-desc').value = data.description || "";
+                    isAlertActive = data.show;
+                    
+                    const toggle = document.getElementById('alert-toggle');
+                    isAlertActive ? toggle.classList.add('active') : toggle.classList.remove('active');
+                    
+                    document.getElementById('prev-title').innerText = data.title || "Hallo Pengguna hmmodz";
+                    document.getElementById('prev-img').src = data.image_url || "https://via.placeholder.com/400x200";
+                    document.getElementById('prev-desc').innerText = data.description || "Deskripsi kosong...";
+                }
+            });
+        }
+
+        function toggleAlert() {
+            isAlertActive = !isAlertActive;
+            const toggle = document.getElementById('alert-toggle');
+            isAlertActive ? toggle.classList.add('active') : toggle.classList.remove('active');
+            db.ref('app_announcement/show').set(isAlertActive);
+        }
+
+        function updateAnnouncement() {
+            const title = document.getElementById('announce-title').value;
+            const img = document.getElementById('announce-image').value;
+            const desc = document.getElementById('announce-desc').value;
+
+            db.ref('app_announcement').update({
+                title: title,
+                image_url: img,
+                description: desc,
+                show: isAlertActive
+            }).then(() => {
+                alert("Berhasil Memperbarui Alert di Aplikasi!");
+            });
+        }
+
         function initDashboard() {
             const liveCtx = document.getElementById('liveChart').getContext('2d');
-            const gradient = liveCtx.createLinearGradient(0, 0, 0, 300);
-            gradient.addColorStop(0, 'rgba(0, 122, 255, 0.4)');
+            const gradient = liveCtx.createLinearGradient(0, 0, 0, 250);
+            gradient.addColorStop(0, 'rgba(0, 122, 255, 0.3)');
             gradient.addColorStop(1, 'rgba(0, 122, 255, 0)');
 
             const liveData = {
@@ -230,13 +263,7 @@
                     data: Array(15).fill(0),
                     borderColor: '#007AFF',
                     backgroundColor: gradient,
-                    fill: true,
-                    tension: 0.4,
-                    borderWidth: 3,
-                    pointRadius: 4,
-                    pointBackgroundColor: '#fff',
-                    pointBorderColor: '#007AFF',
-                    pointBorderWidth: 2,
+                    fill: true, tension: 0.4, borderWidth: 3, pointRadius: 0
                 }]
             };
 
@@ -244,41 +271,39 @@
                 type: 'line',
                 data: liveData,
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
+                    responsive: true, maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
-                    scales: {
-                        x: { display: false },
-                        y: { 
-                            beginAtZero: true, 
-                            grid: { color: 'rgba(255,255,255,0.05)', drawBorder: false },
-                            ticks: { color: 'rgba(255,255,255,0.2)', font: { size: 10, weight: 'bold' } }
-                        }
-                    }
+                    scales: { x: { display: false }, y: { display: false } }
                 }
             });
 
             db.ref('online_users').on('value', (snapshot) => {
                 const count = snapshot.numChildren() || 0;
                 document.getElementById('active-users').innerText = count;
-                
                 liveData.datasets[0].data.push(count);
                 liveData.datasets[0].data.shift();
-                liveChart.update('none');
+                liveChart.update();
             });
 
-            setInterval(() => {
-                const start = Date.now();
-                fetch(window.location.href, { mode: 'no-cors' }).then(() => {
-                    document.getElementById('ping-val').innerHTML = `${Date.now() - start}<span class="text-xs font-medium opacity-20 ml-1">MS</span>`;
-                });
-                
-                const currentReq = document.getElementById('total-req').innerText;
-                if(currentReq.includes('k')) {
-                    let val = parseFloat(currentReq) + 100;
-                    document.getElementById('total-req').innerText = val.toFixed(1) + 'k';
-                }
-            }, 3000);
+            const services = [
+                { name: 'Anime Stream', val: 82, color: 'blue' },
+                { name: 'Community Chat', val: 45, color: 'green' },
+                { name: 'TV Online', val: 67, color: 'orange' }
+            ];
+
+            const trafficCont = document.getElementById('traffic-stats');
+            services.forEach(s => {
+                trafficCont.innerHTML += `
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-[10px] font-bold uppercase tracking-widest">
+                            <span class="text-white/40">${s.name}</span>
+                            <span class="text-${s.color}-500">${s.val}%</span>
+                        </div>
+                        <div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+                            <div class="bg-${s.color}-500 h-full w-[${s.val}%] rounded-full shadow-[0_0_10px_rgba(0,122,255,0.2)]"></div>
+                        </div>
+                    </div>`;
+            });
         }
     </script>
 </body>
