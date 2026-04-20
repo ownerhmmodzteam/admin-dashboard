@@ -85,7 +85,7 @@
     <div id="dashboard-content" class="hidden max-w-6xl mx-auto">
         <header class="flex justify-between items-center mb-10">
             <div>
-                <h1 class="text-2xl font-black italic tracking-tighter">HM <span class="text-blue-500 not-italic uppercase text-sm">Real-time</span></h1>
+                <h1 class="text-2xl font-black italic tracking-tighter">hmmodz <span class="text-blue-500 not-italic uppercase text-sm"> Admin</span></h1>
                 <p class="text-white/40 text-[10px] font-bold uppercase tracking-[3px] mt-1">Console Dashboard</p>
             </div>
             <div class="glass-card px-4 py-2.5 flex items-center gap-3">
@@ -108,7 +108,7 @@
             <div class="glass-card p-6">
                 <div class="stat-icon mb-4" style="color: #f59e0b; background: rgba(245, 158, 11, 0.1);"><i class="fa-solid fa-server"></i></div>
                 <p class="text-white/40 text-[9px] font-bold uppercase tracking-widest">Total Req</p>
-                <h2 class="text-4xl font-black mt-1" id="total-req">3.8k</h2>
+                <h2 class="text-4xl font-black mt-1" id="total-req">0</h2>
             </div>
             <div class="glass-card p-6">
                 <div class="stat-icon mb-4" style="color: #ec4899; background: rgba(236, 72, 153, 0.1);"><i class="fa-solid fa-shield-halved"></i></div>
@@ -200,7 +200,7 @@
 
         function checkAuth() {
             const pass = document.getElementById('admin-pass').value;
-            if(pass === "hmmodzvip") {
+            if(pass === "hm") {
                 document.getElementById('auth-screen').style.display = 'none';
                 document.getElementById('dashboard-content').classList.remove('hidden');
                 initDashboard();
