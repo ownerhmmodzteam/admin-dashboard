@@ -3,68 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HM MODZ ADMIN DASHBOARD</title>
+    <title>HM MODZ SUPREME DASHBOARD</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --accent: #007AFF;
-            --bg: #000205;
-            --glass: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.08);
-        }
-        body {
-            background-color: var(--bg);
-            background-image: 
-                radial-gradient(circle at 0% 0%, rgba(0, 122, 255, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 100% 100%, rgba(88, 86, 214, 0.1) 0%, transparent 40%);
-            background-attachment: fixed;
-            color: #fff;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            margin: 0;
-            overflow-x: hidden;
-        }
-        .glass-card {
-            background: var(--glass);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border: 1px solid var(--border);
-            border-radius: 28px;
-        }
-        .stat-icon {
-            width: 50px; height: 50px;
-            display: flex; align-items: center; justify-content: center;
-            border-radius: 18px; background: rgba(0, 122, 255, 0.1);
-            color: var(--accent); font-size: 1.2rem;
-        }
-        .pulse-live {
-            width: 10px; height: 10px; background: #10b981; border-radius: 50%; position: relative;
-        }
-        .pulse-live::after {
-            content: ''; position: absolute; inset: -4px;
-            border: 2px solid #10b981; border-radius: 50%;
-            animation: pulse-ring 1.5s infinite;
-        }
+        :root { --accent: #007AFF; --bg: #000205; --glass: rgba(255, 255, 255, 0.03); --border: rgba(255, 255, 255, 0.08); }
+        body { background-color: var(--bg); background-image: radial-gradient(circle at 0% 0%, rgba(0, 122, 255, 0.15) 0%, transparent 40%), radial-gradient(circle at 100% 100%, rgba(88, 86, 214, 0.1) 0%, transparent 40%); background-attachment: fixed; color: #fff; font-family: -apple-system, sans-serif; margin: 0; overflow-x: hidden; }
+        .glass-card { background: var(--glass); backdrop-filter: blur(30px); border: 1px solid var(--border); border-radius: 28px; }
+        .pulse-live { width: 10px; height: 10px; background: #10b981; border-radius: 50%; position: relative; }
+        .pulse-live::after { content: ''; position: absolute; inset: -4px; border: 2px solid #10b981; border-radius: 50%; animation: pulse-ring 1.5s infinite; }
         @keyframes pulse-ring { 0% { transform: scale(0.5); opacity: 1; } 100% { transform: scale(2); opacity: 0; } }
-        #auth-screen {
-            position: fixed; inset: 0; z-index: 9999;
-            background: #000; display: flex; align-items: center; justify-content: center; padding: 20px;
-        }
-        .ios-input {
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 16px; color: white; padding: 16px; width: 100%; outline: none; transition: 0.3s;
-        }
-        .ios-input:focus { border-color: var(--accent); background: rgba(255,255,255,0.08); }
-        .toggle-btn {
-            width: 50px; height: 26px; background: #333; border-radius: 20px; position: relative; transition: 0.3s;
-        }
-        .toggle-btn.active { background: #34c759; }
-        .toggle-circle {
-            width: 22px; height: 22px; background: white; border-radius: 50%;
-            position: absolute; top: 2px; left: 2px; transition: 0.3s;
-        }
-        .toggle-btn.active .toggle-circle { left: 26px; }
+        #auth-screen { position: fixed; inset: 0; z-index: 9999; background: #000; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .ios-input { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; color: white; padding: 16px; width: 100%; outline: none; transition: 0.3s; font-size: 14px; }
+        .ios-input:focus { border-color: var(--accent); }
+        .nav-tab { cursor: pointer; padding: 10px 20px; border-radius: 12px; font-size: 10px; font-weight: 800; letter-spacing: 1px; transition: 0.3s; border: 1px solid transparent; opacity: 0.4; }
+        .nav-tab.active { opacity: 1; background: rgba(0,122,255,0.1); border-color: rgba(0,122,255,0.3); color: var(--accent); }
+        .activity-log { height: 300px; overflow-y: auto; scrollbar-width: none; }
+        .activity-item { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 12px; }
         ::-webkit-scrollbar { display: none; }
     </style>
 </head>
@@ -83,98 +40,77 @@
     </div>
 
     <div id="dashboard-content" class="hidden max-w-6xl mx-auto">
-        <header class="flex justify-between items-center mb-10">
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10">
             <div>
-                <h1 class="text-2xl font-black italic tracking-tighter">hmmodz <span class="text-blue-500 not-italic uppercase text-sm"> Admin</span></h1>
+                <h1 class="text-2xl font-black italic tracking-tighter">HM <span class="text-blue-500 not-italic uppercase text-sm">Real-time</span></h1>
                 <p class="text-white/40 text-[10px] font-bold uppercase tracking-[3px] mt-1">Console Dashboard</p>
             </div>
-            <div class="glass-card px-4 py-2.5 flex items-center gap-3">
-                <div class="pulse-live"></div>
-                <span class="text-[10px] font-black tracking-widest uppercase">System Live</span>
+            <div class="flex gap-2 bg-white/5 p-1.5 rounded-2xl border border-white/5">
+                <div onclick="switchTab('stream')" id="tab-stream" class="nav-tab active">HM STREAM</div>
+                <div onclick="switchTab('chat')" id="tab-chat" class="nav-tab">CHAT SERVER</div>
             </div>
         </header>
 
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <div class="glass-card p-6 border-l-4 border-blue-500">
-                <div class="stat-icon mb-4"><i class="fa-solid fa-users"></i></div>
-                <p class="text-white/40 text-[9px] font-bold uppercase tracking-widest">Active Users</p>
-                <h2 class="text-4xl font-black mt-1 text-white" id="active-users">0</h2>
+        <div id="section-stream" class="space-y-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="glass-card p-6 border-l-4 border-blue-500">
+                    <p class="text-white/40 text-[9px] font-bold uppercase tracking-widest">Active Streamers</p>
+                    <h2 class="text-4xl font-black mt-1" id="active-users-stream">0</h2>
+                </div>
+                <div class="glass-card p-6">
+                    <p class="text-white/40 text-[9px] font-bold uppercase tracking-widest">Server Ping</p>
+                    <h2 class="text-4xl font-black mt-1 text-green-500" id="ping-val">24<span class="text-xs opacity-20 ml-1">MS</span></h2>
+                </div>
+                <div class="glass-card p-6">
+                    <p class="text-white/40 text-[9px] font-bold uppercase tracking-widest">API Status</p>
+                    <h2 class="text-4xl font-black mt-1 text-blue-400">LIVE</h2>
+                </div>
+                <div class="glass-card p-6">
+                    <p class="text-white/40 text-[9px] font-bold uppercase tracking-widest">DB Health</p>
+                    <h2 class="text-4xl font-black mt-1 text-pink-500">100%</h2>
+                </div>
             </div>
-            <div class="glass-card p-6">
-                <div class="stat-icon mb-4" style="color: #10b981; background: rgba(16, 185, 129, 0.1);"><i class="fa-solid fa-bolt"></i></div>
-                <p class="text-white/40 text-[9px] font-bold uppercase tracking-widest">Ping Status</p>
-                <h2 class="text-4xl font-black mt-1" id="ping-val">--<span class="text-xs font-medium opacity-20 ml-1">MS</span></h2>
-            </div>
-            <div class="glass-card p-6">
-                <div class="stat-icon mb-4" style="color: #f59e0b; background: rgba(245, 158, 11, 0.1);"><i class="fa-solid fa-server"></i></div>
-                <p class="text-white/40 text-[9px] font-bold uppercase tracking-widest">Total Req</p>
-                <h2 class="text-4xl font-black mt-1" id="total-req">2,8k</h2>
-            </div>
-            <div class="glass-card p-6">
-                <div class="stat-icon mb-4" style="color: #ec4899; background: rgba(236, 72, 153, 0.1);"><i class="fa-solid fa-shield-halved"></i></div>
-                <p class="text-white/40 text-[9px] font-bold uppercase tracking-widest">Security</p>
-                <h2 class="text-4xl font-black mt-1">99<span class="text-xs font-medium opacity-20 ml-1">%</span></h2>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 glass-card p-8">
+                    <h3 class="text-lg font-bold tracking-tight mb-6">Announcement Control</h3>
+                    <div class="space-y-4">
+                        <input type="text" id="announce-title" class="ios-input" placeholder="Title">
+                        <input type="text" id="announce-image" class="ios-input" placeholder="Image URL">
+                        <textarea id="announce-desc" class="ios-input h-24 resize-none" placeholder="Description"></textarea>
+                        <button onclick="updateAnnouncement()" class="w-full h-14 bg-blue-600 rounded-2xl font-black text-xs uppercase tracking-widest">Broadcast Update</button>
+                    </div>
+                </div>
+                <div class="glass-card p-8">
+                    <h3 class="text-lg font-bold tracking-tight mb-6">Live Traffic</h3>
+                    <div class="h-[200px]"><canvas id="liveChart"></canvas></div>
+                </div>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="lg:col-span-2 space-y-6">
+        <div id="section-chat" class="hidden space-y-8">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div class="glass-card p-8">
-                    <div class="flex justify-between items-center mb-10">
-                        <div>
-                            <h3 class="text-lg font-bold tracking-tight">Announcement Control</h3>
-                            <p class="text-white/20 text-[10px] uppercase font-bold tracking-widest mt-1">Remote Alert System</p>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <span class="text-[10px] font-bold text-white/40 uppercase">Show Alert</span>
-                            <div id="alert-toggle" onclick="toggleAlert()" class="toggle-btn cursor-pointer">
-                                <div class="toggle-circle"></div>
-                            </div>
-                        </div>
-                    </div>
-                    
+                    <h3 class="text-lg font-bold tracking-tight mb-2">User Management</h3>
+                    <p class="text-white/20 text-[10px] uppercase font-bold tracking-widest mb-8">Modify User Rank</p>
                     <div class="space-y-4">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="space-y-2">
-                                <label class="text-[10px] font-bold text-blue-500 uppercase px-2">Title</label>
-                                <input type="text" id="announce-title" class="ios-input" placeholder="Hallo Pengguna hmmodz">
-                            </div>
-                            <div class="space-y-2">
-                                <label class="text-[10px] font-bold text-blue-500 uppercase px-2">Image URL (PNG)</label>
-                                <input type="text" id="announce-image" class="ios-input" placeholder="https://example.com/image.png">
-                            </div>
-                        </div>
-                        <div class="space-y-2">
-                            <label class="text-[10px] font-bold text-blue-500 uppercase px-2">Description</label>
-                            <textarea id="announce-desc" class="ios-input h-32 resize-none" placeholder="Masukkan deskripsi pembaruan aplikasi..."></textarea>
-                        </div>
-                        <button onclick="updateAnnouncement()" class="w-full h-14 bg-blue-500 rounded-2xl font-black text-xs uppercase tracking-widest active:scale-95 transition-all mt-4">Broadcast Update</button>
+                        <input type="text" id="chat-target-user" class="ios-input" placeholder="@username">
+                        <select id="chat-target-role" class="ios-input">
+                            <option value="Member">Member</option>
+                            <option value="Admin hmmodz">Admin</option>
+                            <option value="Owner Of hmmodz">Owner Of hmmodz</option>
+                            <option value="Blacklist Human">Blacklist (Banned)</option>
+                        </select>
+                        <button onclick="updateUserRole()" class="w-full h-14 bg-indigo-600 rounded-2xl font-black text-xs uppercase tracking-widest">Update Rank</button>
                     </div>
                 </div>
 
-                <div class="glass-card p-8">
-                    <div class="h-[250px] w-full">
-                        <canvas id="liveChart"></canvas>
+                <div class="lg:col-span-2 glass-card p-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-bold tracking-tight">Live Chat Activity</h3>
+                        <span class="text-[10px] font-black bg-white/5 px-3 py-1 rounded-full border border-white/5" id="total-messages">0 Messages</span>
                     </div>
-                </div>
-            </div>
-            
-            <div class="space-y-6">
-                <div class="glass-card p-8">
-                    <h3 class="text-lg font-bold tracking-tight mb-2">Service Traffic</h3>
-                    <p class="text-white/20 text-[10px] uppercase font-bold tracking-widest mb-10">Top Performing</p>
-                    <div class="space-y-6" id="traffic-stats"></div>
-                </div>
-
-                <div class="glass-card p-6 bg-blue-500/5 border-blue-500/20">
-                    <h3 class="text-sm font-bold mb-4">Preview Alert</h3>
-                    <div class="bg-[#1c1c1e] rounded-2xl overflow-hidden border border-white/10">
-                        <img id="prev-img" src="https://via.placeholder.com/400x200" class="w-full h-24 object-cover opacity-50">
-                        <div class="p-4">
-                            <h4 id="prev-title" class="text-xs font-bold">Hallo Pengguna hmmodz</h4>
-                            <p id="prev-desc" class="text-[10px] text-white/40 mt-1 line-clamp-2">Deskripsi akan muncul di sini sesuai input...</p>
-                        </div>
-                    </div>
+                    <div class="activity-log" id="chat-log-list"></div>
                 </div>
             </div>
         </div>
@@ -184,125 +120,93 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyA9BxTN24XqHOjB1qQdVa6yYbRjun0Sl8c",
-            authDomain: "cracker-key.firebaseapp.com",
-            databaseURL: "https://cracker-key-default-rtdb.firebaseio.com",
-            projectId: "cracker-key",
-            storageBucket: "cracker-key.firebasestorage.app",
-            messagingSenderId: "609437093302",
-            appId: "1:609437093302:web:75a62480ea15324f968517"
-        };
+        const configStream = { apiKey: "AIzaSyA9BxTN24XqHOjB1qQdVa6yYbRjun0Sl8c", authDomain: "cracker-key.firebaseapp.com", databaseURL: "https://cracker-key-default-rtdb.firebaseio.com", projectId: "cracker-key" };
+        const configChat = { apiKey: "AIzaSyDHO6Ssuqx723r2DTMEmZV2kON8iM1yf0c", authDomain: "key-server-chat.firebaseapp.com", databaseURL: "https://key-server-chat-default-rtdb.firebaseio.com", projectId: "key-server-chat" };
 
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-        let isAlertActive = false;
+        const appStream = firebase.initializeApp(configStream, "stream");
+        const appChat = firebase.initializeApp(configChat, "chat");
+        const dbStream = appStream.database();
+        const dbChat = appChat.database();
 
         function checkAuth() {
-            const pass = document.getElementById('admin-pass').value;
-            if(pass === "hm") {
+            if(document.getElementById('admin-pass').value === "hmmodzvip") {
                 document.getElementById('auth-screen').style.display = 'none';
                 document.getElementById('dashboard-content').classList.remove('hidden');
-                initDashboard();
-                syncAnnouncement();
+                initSystem();
+            } else { alert("Password Salah!"); }
+        }
+
+        function switchTab(type) {
+            const sStream = document.getElementById('section-stream');
+            const sChat = document.getElementById('section-chat');
+            const tStream = document.getElementById('tab-stream');
+            const tChat = document.getElementById('tab-chat');
+
+            if(type === 'stream') {
+                sStream.classList.remove('hidden'); sChat.classList.add('hidden');
+                tStream.classList.add('active'); tChat.classList.remove('active');
             } else {
-                alert("Password Salah!");
+                sStream.classList.add('hidden'); sChat.classList.remove('hidden');
+                tStream.classList.remove('active'); tChat.classList.add('active');
             }
         }
 
-        function syncAnnouncement() {
-            db.ref('app_announcement').on('value', snapshot => {
-                const data = snapshot.val();
-                if(data) {
-                    document.getElementById('announce-title').value = data.title || "";
-                    document.getElementById('announce-image').value = data.image_url || "";
-                    document.getElementById('announce-desc').value = data.description || "";
-                    isAlertActive = data.show;
-                    
-                    const toggle = document.getElementById('alert-toggle');
-                    isAlertActive ? toggle.classList.add('active') : toggle.classList.remove('active');
-                    
-                    document.getElementById('prev-title').innerText = data.title || "Hallo Pengguna hmmodz";
-                    document.getElementById('prev-img').src = data.image_url || "https://via.placeholder.com/400x200";
-                    document.getElementById('prev-desc').innerText = data.description || "Deskripsi kosong...";
-                }
+        function initSystem() {
+            dbStream.ref('online_users').on('value', s => { document.getElementById('active-users-stream').innerText = s.numChildren(); });
+            
+            dbChat.ref('global_chat_v7').limitToLast(20).on('value', s => {
+                const list = document.getElementById('chat-log-list');
+                const total = document.getElementById('total-messages');
+                list.innerHTML = '';
+                let count = 0;
+                s.forEach(snap => {
+                    const d = snap.val();
+                    list.innerHTML = `<div class="activity-item">
+                        <span class="text-blue-500 font-bold">@${d.user || d.name}</span>: 
+                        <span class="text-white/70">${d.msg}</span>
+                        <div class="text-[8px] text-white/20 mt-1">${new Date(d.time).toLocaleTimeString()}</div>
+                    </div>` + list.innerHTML;
+                    count++;
+                });
+                total.innerText = count + " Recent Msgs";
             });
+
+            initChart();
         }
 
-        function toggleAlert() {
-            isAlertActive = !isAlertActive;
-            const toggle = document.getElementById('alert-toggle');
-            isAlertActive ? toggle.classList.add('active') : toggle.classList.remove('active');
-            db.ref('app_announcement/show').set(isAlertActive);
+        async function updateUserRole() {
+            let user = document.getElementById('chat-target-user').value.trim().toLowerCase();
+            if(user.startsWith('@')) user = user.substring(1);
+            const role = document.getElementById('chat-target-role').value;
+
+            if(!user) return Swal.fire('Error', 'Input Username!', 'error');
+
+            const snap = await dbChat.ref('usernames/' + user).get();
+            if(!snap.exists()) return Swal.fire('Not Found', 'User tidak terdaftar!', 'error');
+
+            await dbChat.ref('users/' + snap.val() + '/role').set(role);
+            Swal.fire('Success', `@${user} updated to ${role}`, 'success');
+            document.getElementById('chat-target-user').value = '';
         }
 
         function updateAnnouncement() {
-            const title = document.getElementById('announce-title').value;
-            const img = document.getElementById('announce-image').value;
-            const desc = document.getElementById('announce-desc').value;
-
-            db.ref('app_announcement').update({
-                title: title,
-                image_url: img,
-                description: desc,
-                show: isAlertActive
-            }).then(() => {
-                alert("Berhasil Memperbarui Alert di Aplikasi!");
-            });
+            dbStream.ref('app_announcement').update({
+                title: document.getElementById('announce-title').value,
+                image_url: document.getElementById('announce-image').value,
+                description: document.getElementById('announce-desc').value,
+                show: true
+            }).then(() => alert("Broadcast Success!"));
         }
 
-        function initDashboard() {
-            const liveCtx = document.getElementById('liveChart').getContext('2d');
-            const gradient = liveCtx.createLinearGradient(0, 0, 0, 250);
-            gradient.addColorStop(0, 'rgba(0, 122, 255, 0.3)');
-            gradient.addColorStop(1, 'rgba(0, 122, 255, 0)');
-
-            const liveData = {
-                labels: Array(15).fill(''),
-                datasets: [{
-                    data: Array(15).fill(0),
-                    borderColor: '#007AFF',
-                    backgroundColor: gradient,
-                    fill: true, tension: 0.4, borderWidth: 3, pointRadius: 0
-                }]
-            };
-
-            const liveChart = new Chart(liveCtx, {
+        function initChart() {
+            const ctx = document.getElementById('liveChart').getContext('2d');
+            new Chart(ctx, {
                 type: 'line',
-                data: liveData,
-                options: {
-                    responsive: true, maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: { x: { display: false }, y: { display: false } }
-                }
-            });
-
-            db.ref('online_users').on('value', (snapshot) => {
-                const count = snapshot.numChildren() || 0;
-                document.getElementById('active-users').innerText = count;
-                liveData.datasets[0].data.push(count);
-                liveData.datasets[0].data.shift();
-                liveChart.update();
-            });
-
-            const services = [
-                { name: 'Anime Stream', val: 82, color: 'blue' },
-                { name: 'Community Chat', val: 45, color: 'green' },
-                { name: 'TV Online', val: 67, color: 'orange' }
-            ];
-
-            const trafficCont = document.getElementById('traffic-stats');
-            services.forEach(s => {
-                trafficCont.innerHTML += `
-                    <div class="space-y-2">
-                        <div class="flex justify-between text-[10px] font-bold uppercase tracking-widest">
-                            <span class="text-white/40">${s.name}</span>
-                            <span class="text-${s.color}-500">${s.val}%</span>
-                        </div>
-                        <div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
-                            <div class="bg-${s.color}-500 h-full w-[${s.val}%] rounded-full shadow-[0_0_10px_rgba(0,122,255,0.2)]"></div>
-                        </div>
-                    </div>`;
+                data: {
+                    labels: ['1', '2', '3', '4', '5'],
+                    datasets: [{ data: [12, 19, 15, 25, 20], borderColor: '#007AFF', tension: 0.4, fill: true, backgroundColor: 'rgba(0,122,255,0.1)' }]
+                },
+                options: { plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } }
             });
         }
     </script>
