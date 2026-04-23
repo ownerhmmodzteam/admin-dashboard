@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HM MODZ SUPREME DASHBOARD</title>
+    <title>HM MODZ DASHBOARD</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -66,8 +66,8 @@
                     <h2 class="text-4xl font-black mt-1 text-blue-400">LIVE</h2>
                 </div>
                 <div class="glass-card p-6">
-                    <p class="text-white/40 text-[9px] font-bold uppercase tracking-widest">DB Health</p>
-                    <h2 class="text-4xl font-black mt-1 text-pink-500">100%</h2>
+                    <p class="text-white/40 text-[9px] font-bold uppercase tracking-widest">Server Condition</p>
+                    <h2 class="text-4xl font-black mt-1 text-pink-500">Online</h2>
                 </div>
             </div>
 
@@ -92,7 +92,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div class="glass-card p-8">
                     <h3 class="text-lg font-bold tracking-tight mb-2">User Management</h3>
-                    <p class="text-white/20 text-[10px] uppercase font-bold tracking-widest mb-8">Modify User Rank</p>
+                    <p class="text-white/20 text-[10px] uppercase font-bold tracking-widest mb-8">Modify User</p>
                     <div class="space-y-4">
                         <input type="text" id="chat-target-user" class="ios-input" placeholder="@username">
                         <select id="chat-target-role" class="ios-input">
@@ -101,7 +101,7 @@
                             <option value="Owner Of hmmodz">Owner Of hmmodz</option>
                             <option value="Blacklist Human">Blacklist (Banned)</option>
                         </select>
-                        <button onclick="updateUserRole()" class="w-full h-14 bg-indigo-600 rounded-2xl font-black text-xs uppercase tracking-widest">Update Rank</button>
+                        <button onclick="updateUserRole()" class="w-full h-14 bg-indigo-600 rounded-2xl font-black text-xs uppercase tracking-widest">Update User Role</button>
                     </div>
                 </div>
 
